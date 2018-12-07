@@ -5,12 +5,21 @@ from kinopoisk.parse_query import find_top_five_by_name, list_of_films
 
 from aiogram.utils.helper import Helper, HelperMode, ListItem
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 bot = Bot(token='663290175:AAGT2h1895I-xZ_7Ma2VsqcyrQDa2ecV7p8')
 dp = Dispatcher(bot, storage=MemoryStorage())
 
 
 CHOICES = {1: '1', 2: '2', 3: '3', 4: '4', 5: '5', 6: 'Ничего не подходит'}
+
+
+buttons = [KeyboardButton('1'),
+           KeyboardButton('1'),
+           KeyboardButton('1'),
+           KeyboardButton('1'),
+           KeyboardButton('1')]
+button_6 = KeyboardButton('Ничего не подходит')
 
 
 class FilmStates(Helper):
@@ -52,7 +61,9 @@ async def search_film(message: types.Message):
     LAST_SEARCH_FOR_USER[message.from_user.id] = films
     msg = list_of_films(films)
     await state.set_state(FilmStates.all()[1])
-    await message.reply(msg)
+    keyboard = ReplyKeyboardMarkup(resize_keyboard=True,  one_time_keyboard=True)
+    keyboard.add(*buttons[:len(films)], button_6)
+    await message.reply(msg, reply_markup=keyboard)
 
 
 @dp.message_handler(commands=['search_film'])
