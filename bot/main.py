@@ -30,7 +30,7 @@ async def send_welcome(message: types.Message):
 @dp.message_handler(state=FilmStates.FILM_STATE_1)
 async def choose_film(message: types.Message):
     print(message.text)
-    if message.text not in CHOICES.keys():
+    if message.text not in CHOICES.values():
         await message.reply("Поищем другой фильм? Пиши название!")
     elif message.text == CHOICES[6]:
         await message.reply("Попробуй уточнить название для более качественного поиска.")
