@@ -14,7 +14,7 @@ def get_description(pattern):
     return pattern[start:-6].replace('<br>', '\n')
 
 
-def parse_page(film):
+def set_film_info(film):
     search_response = requests.get(film.url)
     if search_response.status_code != 200:
         print('Something went wrong...')

@@ -14,3 +14,6 @@ class Film:
 
     def set_description(self, description):
         self.description = description
+
+    def print(self):
+        print(self.name, self.year, self.image, self.description)

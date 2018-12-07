@@ -2,7 +2,7 @@ from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
 from kinopoisk.parse_query import find_top_five_by_name, list_of_films
-from kinopoisk.parse_film_page import parse_page
+from kinopoisk.parse_film_page import set_film_info
 
 from aiogram.utils.helper import Helper, HelperMode, ListItem
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
@@ -50,7 +50,8 @@ async def choose_film(message: types.Message):
                                "качественного поиска.")
     else:
         film = LAST_SEARCH_FOR_USER[message.from_user.id][int(message.text) - 1]
-        parse_page(film)
+        set_film_info(film)
+        film.print()
         if film.image:
             caption = ''
             if film.description:
