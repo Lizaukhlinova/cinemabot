@@ -51,9 +51,16 @@ async def choose_film(message: types.Message):
     else:
         film = LAST_SEARCH_FOR_USER[message.from_user.id][int(message.text) - 1]
         parse_page(film)
+        if film.image:
+            caption = ''
+            if film.description:
+                caption = film.description
+            await bot.send_photo(message.from_user.id, film.image,
+                                 caption=caption)
+        else:
+            await bot.send_message(message.from_user.id, film.url)
         print(film.image)
         print(film.description)
-        await bot.send_message(message.from_user.id, film.url)
     state = dp.current_state(user=message.from_user.id)
     await state.set_state(FilmStates.FILM_STATE_0)
 

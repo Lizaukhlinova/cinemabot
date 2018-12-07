@@ -20,10 +20,12 @@ def parse_page(film):
         print('Something went wrong...')
         return
     img_pattern = re.search(b'openImgPopup\(\'[\W\w]*?\'\)',
-                            search_response.content).group(0)
-    img_url = get_img_url(img_pattern.decode('cp1251'))
-    if img_url == common.no_poster_url:
-        img_url = None
+                            search_response.content)
+    img_url = None
+    if img_pattern:
+        img_url = get_img_url(img_pattern.group(0).decode('cp1251'))
+        if img_url == common.no_poster_url:
+            img_url = None
     film.set_image(img_url)
 
     description = re.search(b'<div class="brand_words '
