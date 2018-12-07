@@ -10,7 +10,7 @@ bot = Bot(token='663290175:AAGT2h1895I-xZ_7Ma2VsqcyrQDa2ecV7p8')
 dp = Dispatcher(bot, storage=MemoryStorage())
 
 
-CHOICES = {'1', '2', '3', '4', '5', 'Ничего не подходит'}
+CHOICES = {1: '1', 2: '2', 3: '3', 4: '4', 5: '5', 6: 'Ничего не подходит'}
 
 
 class FilmStates(Helper):
@@ -30,10 +30,12 @@ async def send_welcome(message: types.Message):
 @dp.message_handler(state=FilmStates.FILM_STATE_1)
 async def choose_film(message: types.Message):
     print(message.text)
-    if message.text not in CHOICES:
-        await message.reply("Попробуйте уточнить название для более качественного поиска.")
+    if message.text not in CHOICES.keys():
+        await message.reply("Поищем другой фильм? Пиши название!")
+    elif message.text == CHOICES[6]:
+        await message.reply("Попробуй уточнить название для более качественного поиска.")
     else:
-        await message.reply("Вы выбрали {}".format(message.text))
+        await message.reply("Ты выбрал {}".format(message.text))
     state = dp.current_state(user=message.from_user.id)
     await state.set_state(FilmStates.FILM_STATE_0)
 

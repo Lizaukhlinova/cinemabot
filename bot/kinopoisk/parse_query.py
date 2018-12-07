@@ -15,7 +15,6 @@ class Film:
 
 def parse_a_tag(tag):
     name = re.search(b'data-type[\W\w]*?</a>', tag).group(0)[:-4]
-    print(name)
     name = re.split(b'>', name)[1].decode(encoding='cp1251')
     name = html.unescape(name)
     url = re.search(b'film/[0-9]*', tag).group(0).decode(encoding='cp1251')
