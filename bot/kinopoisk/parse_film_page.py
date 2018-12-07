@@ -2,8 +2,7 @@ import requests
 import re
 import html
 
-import common
-from film import Film
+from . import common
 
 
 def get_img_url(pattern):

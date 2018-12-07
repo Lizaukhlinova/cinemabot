@@ -3,8 +3,8 @@ import requests
 import re
 import html
 
-import common
-from film import Film
+from . import common
+from . import film
 
 
 def parse_a_tag(tag):
@@ -16,7 +16,7 @@ def parse_a_tag(tag):
     if year:
         year = year.group(0)[7:-1].decode(encoding='cp1251')
         year = html.unescape(year)
-    return Film(name, url, year)
+    return film.Film(name, url, year)
 
 
 def find_top_five_by_name(film):
