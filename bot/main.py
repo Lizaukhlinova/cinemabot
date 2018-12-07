@@ -15,9 +15,11 @@ CHOICES = {1: '1', 2: '2', 3: '3', 4: '4', 5: '5', 6: 'Ничего не под�
 
 class FilmStates(Helper):
     mode = HelperMode.snake_case
-
     FILM_STATE_0 = ListItem()
     FILM_STATE_1 = ListItem()
+
+
+LAST_SEARCH_FOR_USER = {}
 
 
 @dp.message_handler(commands=['start', 'help'])
@@ -29,7 +31,8 @@ async def send_welcome(message: types.Message):
 
 @dp.message_handler(state=FilmStates.FILM_STATE_1)
 async def choose_film(message: types.Message):
-    print(message.text)
+    print(message.from_user.id)
+    print(LAST_SEARCH_FOR_USER)
     if message.text not in CHOICES.values():
         await message.reply("Поищем другой фильм? Пиши название!")
     elif message.text == CHOICES[6]:
@@ -46,6 +49,7 @@ async def search_film(message: types.Message):
     state = dp.current_state(user=message.from_user.id)
     film_name = message.text
     films = find_top_five_by_name(film_name)
+    LAST_SEARCH_FOR_USER[message.from_user.id] = films
     msg = list_of_films(films)
     await state.set_state(FilmStates.all()[1])
     await message.reply(msg)
