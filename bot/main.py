@@ -2,6 +2,7 @@ from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
 from kinopoisk.parse_query import find_top_five_by_name, list_of_films
+from kinopoisk.parse_film_page import parse_page
 
 from aiogram.utils.helper import Helper, HelperMode, ListItem
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
@@ -49,7 +50,9 @@ async def choose_film(message: types.Message):
                                "качественного поиска.")
     else:
         film = LAST_SEARCH_FOR_USER[message.from_user.id][int(message.text) - 1]
-        await bot.send_message(message.from_user.id, "Ты выбрал {}, {}".format(film.name, film.year))
+        parse_page(film)
+        print(film.image)
+        print(film.description)
         await bot.send_message(message.from_user.id, film.url)
     state = dp.current_state(user=message.from_user.id)
     await state.set_state(FilmStates.FILM_STATE_0)
@@ -61,6 +64,9 @@ async def search_film(message: types.Message):
     state = dp.current_state(user=message.from_user.id)
     film_name = message.text
     films = find_top_five_by_name(film_name)
+    if not films:
+        message.reply("К сожалению, по твоему запросу ничего не найдено :(\n")
+        return
     LAST_SEARCH_FOR_USER[message.from_user.id] = films
     msg = list_of_films(films)
     await state.set_state(FilmStates.all()[1])
