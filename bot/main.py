@@ -15,10 +15,10 @@ CHOICES = {1: '1', 2: '2', 3: '3', 4: '4', 5: '5', 6: 'Ничего не под�
 
 
 buttons = [KeyboardButton('1'),
-           KeyboardButton('1'),
-           KeyboardButton('1'),
-           KeyboardButton('1'),
-           KeyboardButton('1')]
+           KeyboardButton('2'),
+           KeyboardButton('3'),
+           KeyboardButton('4'),
+           KeyboardButton('5')]
 button_6 = KeyboardButton('Ничего не подходит')
 
 
