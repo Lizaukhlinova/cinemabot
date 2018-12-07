@@ -19,7 +19,7 @@ buttons = [KeyboardButton('1'),
            KeyboardButton('3'),
            KeyboardButton('4'),
            KeyboardButton('5')]
-button_6 = KeyboardButton('Ничего не подходит')
+button_no = KeyboardButton('Ничего не подходит')
 
 
 class FilmStates(Helper):
@@ -41,13 +41,16 @@ async def send_welcome(message: types.Message):
 @dp.message_handler(state=FilmStates.FILM_STATE_1)
 async def choose_film(message: types.Message):
     if message.text not in CHOICES.values():
-        await message.reply("Поищем другой фильм? Пиши название!")
+        await bot.send_message(message.from_user.id,
+                               "Поищем другой фильм? Пиши название!")
     elif message.text == CHOICES[6]:
-        await message.reply("Попробуй уточнить название для более качественного поиска.")
+        await bot.send_message(message.from_user.id,
+                               "Попробуй уточнить название для более "
+                               "качественного поиска.")
     else:
         film = LAST_SEARCH_FOR_USER[message.from_user.id][int(message.text) - 1]
-        await message.reply("Ты выбрал {}, {}".format(film.name, film.year))
-        await message.reply(film.url)
+        await bot.send_message(message.from_user.id, "Ты выбрал {}, {}".format(film.name, film.year))
+        await bot.send_message(message.from_user.id, film.url)
     state = dp.current_state(user=message.from_user.id)
     await state.set_state(FilmStates.FILM_STATE_0)
 
@@ -62,13 +65,8 @@ async def search_film(message: types.Message):
     msg = list_of_films(films)
     await state.set_state(FilmStates.all()[1])
     keyboard = ReplyKeyboardMarkup(resize_keyboard=True,  one_time_keyboard=True)
-    keyboard.add(*buttons[:len(films)], button_6)
+    keyboard.add(*buttons[:len(films)], button_no)
     await message.reply(msg, reply_markup=keyboard)
-
-
-@dp.message_handler(commands=['search_film'])
-async def send_question(message: types.Message):
-    await message.reply("Какой фильм будем искать?")
 
 
 if __name__ == '__main__':
