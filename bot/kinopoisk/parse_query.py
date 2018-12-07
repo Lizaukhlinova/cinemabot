@@ -9,7 +9,7 @@ kinopoisk_url = 'https://www.kinopoisk.ru/'
 class Film:
     def __init__(self, name, url, year):
         self.name = name
-        self.url = url
+        self.url = kinopoisk_url + url
         self.year = year
 
 

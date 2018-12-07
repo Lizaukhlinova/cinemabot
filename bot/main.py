@@ -31,14 +31,14 @@ async def send_welcome(message: types.Message):
 
 @dp.message_handler(state=FilmStates.FILM_STATE_1)
 async def choose_film(message: types.Message):
-    print(message.from_user.id)
-    print(LAST_SEARCH_FOR_USER)
     if message.text not in CHOICES.values():
         await message.reply("Поищем другой фильм? Пиши название!")
     elif message.text == CHOICES[6]:
         await message.reply("Попробуй уточнить название для более качественного поиска.")
     else:
-        await message.reply("Ты выбрал {}".format(message.text))
+        film = LAST_SEARCH_FOR_USER[message.from_user.id][int(message.text) - 1]
+        await message.reply("Ты выбрал {}, {}".format(film.name, film.year))
+        await message.reply(film.url)
     state = dp.current_state(user=message.from_user.id)
     await state.set_state(FilmStates.FILM_STATE_0)
 
