@@ -35,3 +35,4 @@ def set_film_info(film):
         description = description.group(0).decode('cp1251')
         description = get_description(html.unescape(description))
     film.set_description(description)
+    return film

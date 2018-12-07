@@ -50,7 +50,7 @@ async def choose_film(message: types.Message):
                                "качественного поиска.")
     else:
         film = LAST_SEARCH_FOR_USER[message.from_user.id][int(message.text) - 1]
-        set_film_info(film)
+        film = set_film_info(film)
         film.print()
         if film.image:
             caption = ''
