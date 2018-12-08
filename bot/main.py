@@ -4,6 +4,7 @@ from aiogram.utils import executor
 from mail.query import find_top_five_by_name, list_of_films
 from mail.film_page import set_film_info
 from mail import common
+import requests
 
 from aiogram.utils.helper import Helper, HelperMode, ListItem
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
@@ -54,20 +55,19 @@ async def choose_film(message: types.Message):
         button = int(message.text)
         films = LAST_SEARCH_FOR_USER[message.from_user.id]
         if button > len(films[common.film_types[0]]):
-            films = films[common.film_types[1]]
             button -= len(films[common.film_types[0]])
+            films = films[common.film_types[1]]
         else:
             films = films[common.film_types[0]]
         film = films[button - 1]
-        set_film_info(film)
-        # film.print()
-        if film.image:
+        try:
+            set_film_info(film)
             caption = ''
             if film.description:
                 caption = film.description
             await bot.send_photo(message.from_user.id, film.image,
                                  caption=caption)
-        else:
+        except requests.exceptions.ConnectionError:
             await bot.send_message(message.from_user.id, film.url)
         # print(film.image)
         # print(film.description)
