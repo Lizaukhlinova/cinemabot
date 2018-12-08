@@ -82,7 +82,7 @@ async def search_film(message: types.Message):
     film_name = message.text
     films = find_top_five_by_name(film_name)
     if not films:
-        message.reply("К сожалению, по твоему запросу ничего не найдено :(\n")
+        await message.reply("К сожалению, по твоему запросу ничего не найдено :(\n")
         return
     LAST_SEARCH_FOR_USER[message.from_user.id] = films
     msg = list_of_films(films)
