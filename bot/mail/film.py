@@ -4,7 +4,7 @@ from . import common
 class Film:
     def __init__(self, name, url, year):
         self.name = name
-        self.url = common.mail_url + url
+        self.url = url
         self.year = year
         self.image = None
         self.description = None
