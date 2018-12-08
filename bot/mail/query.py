@@ -17,7 +17,7 @@ def parse_a_tag(tag):
 def find_top_five_by_name(film_name):
     film_name = urllib.parse.quote(film_name)
     search_response = requests.get(common.mail_url + '/search/?region_id=70&q='
-                                   + film_name, header=common.HEADERS)
+                                   + film_name, headers=common.HEADERS)
     if search_response.status_code != 200:
         print('Something went wrong...')
         return
