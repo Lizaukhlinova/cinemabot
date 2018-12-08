@@ -60,6 +60,8 @@ async def choose_film(message: types.Message):
                 films = films[common.film_types[1]]
             else:
                 films = films[common.film_types[0]]
+        else:
+            films = films[common.film_types[1]]
         film = films[button - 1]
         try:
             set_film_info(film)
