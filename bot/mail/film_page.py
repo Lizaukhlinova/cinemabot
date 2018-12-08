@@ -10,7 +10,7 @@ def set_film_info(film):
     if search_response.status_code != 200:
         print('Something went wrong...')
         return
-    soup = BeautifulSoup(search_response.content)
+    soup = BeautifulSoup(search_response.content, features="lxml")
     div_tag = soup.find('div', {'class': 'block block_bg_gray padding_vertical_30 js-module'})
     photo = div_tag.find('span', {'class': 'photo__pic'})
     film.set_image(photo['style'][21:-1])
