@@ -1,4 +1,4 @@
-from aiogram import Bot, types
+from aiogram import Bot, types, utils
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
 from mail.query import find_top_five_by_name, list_of_films
@@ -68,9 +68,10 @@ async def choose_film(message: types.Message):
             caption = ''
             if film.description:
                 caption = film.description
+            film.print()
             await bot.send_photo(message.from_user.id, film.image,
                                  caption=caption)
-        except requests.exceptions.ConnectionError:
+        except (requests.exceptions.ConnectionError, utils.exceptions.WrongFileIdentifier):
             await bot.send_message(message.from_user.id, film.url)
         # print(film.image)
         # print(film.description)
