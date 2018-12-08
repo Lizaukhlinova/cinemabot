@@ -54,11 +54,12 @@ async def choose_film(message: types.Message):
     else:
         button = int(message.text)
         films = LAST_SEARCH_FOR_USER[message.from_user.id]
-        if common.film_types[0] in films and button > len(films[common.film_types[0]]):
-            button -= len(films[common.film_types[0]])
-            films = films[common.film_types[1]]
-        else:
-            films = films[common.film_types[0]]
+        if common.film_types[0] in films:
+            if button > len(films[common.film_types[0]]):
+                button -= len(films[common.film_types[0]])
+                films = films[common.film_types[1]]
+            else:
+                films = films[common.film_types[0]]
         film = films[button - 1]
         try:
             set_film_info(film)
