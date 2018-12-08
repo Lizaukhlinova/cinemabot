@@ -74,7 +74,7 @@ async def choose_film(message: types.Message):
                                  caption=caption)
         except (requests.exceptions.ConnectionError, utils.exceptions.WrongFileIdentifier):
             await bot.send_message(message.from_user.id, film.url)
-        await bot.send_message(message.from_user.id, list_of_links(film))
+        await bot.send_message(message.from_user.id, list_of_links(film), parse_mode='HTML')
     state = dp.current_state(user=message.from_user.id)
     await state.set_state(FilmStates.FILM_STATE_0)
 
