@@ -3,6 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from . import film
+from . import common
 
 
 def parse_a_tag(tag):
@@ -16,11 +17,11 @@ def parse_a_tag(tag):
 def find_top_five_by_name(film_name):
     film_name = urllib.parse.quote(film_name)
     search_response = requests.get(film.mail_url + '/search/?region_id=70&q='
-                                   + film_name)
+                                   + film_name, headers=common.HEADERS)
     if search_response.status_code != 200:
         print('Something went wrong...')
         return
-    soup = BeautifulSoup(search_response.content)
+    soup = BeautifulSoup(search_response.content, features="lxml")
     found_tags = soup.findAll("div", {"class": "searchitem__item"})[:5]
     found_films = [parse_a_tag(tag) for tag in found_tags]
     return found_films
