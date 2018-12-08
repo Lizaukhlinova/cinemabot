@@ -1,17 +1,17 @@
-mail_url = 'https://kino.mail.ru'
+from . import common
 
 
 class Film:
     def __init__(self, name, url, year):
         self.name = name
-        self.url = mail_url + url
+        self.url = common.mail_url + url
         self.year = year
         self.image = None
         self.description = None
 
     def set_image(self, image):
         if image.startswith('/'):
-            image = mail_url + image
+            image = common.mail_url + image
         self.image = image
 
     def set_description(self, description):

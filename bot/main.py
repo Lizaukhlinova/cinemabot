@@ -3,6 +3,7 @@ from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
 from mail.query import find_top_five_by_name, list_of_films
 from mail.film_page import set_film_info
+from mail import common
 
 from aiogram.utils.helper import Helper, HelperMode, ListItem
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
@@ -19,7 +20,8 @@ buttons = [KeyboardButton('1'),
            KeyboardButton('2'),
            KeyboardButton('3'),
            KeyboardButton('4'),
-           KeyboardButton('5')]
+           KeyboardButton('5'),
+           KeyboardButton('6')]
 button_no = KeyboardButton('Ничего не подходит')
 
 
@@ -49,7 +51,14 @@ async def choose_film(message: types.Message):
                                "Попробуй уточнить название для более "
                                "качественного поиска.")
     else:
-        film = LAST_SEARCH_FOR_USER[message.from_user.id][int(message.text) - 1]
+        button = int(message.text)
+        films = LAST_SEARCH_FOR_USER[message.from_user.id]
+        if button > len(films[common.film_types[0]]):
+            films = films[common.film_types[1]]
+            button -= len(films[common.film_types[0]])
+        else:
+            films = films[common.film_types[0]]
+        film = films[button - 1]
         set_film_info(film)
         # film.print()
         if film.image:
@@ -79,7 +88,8 @@ async def search_film(message: types.Message):
     msg = list_of_films(films)
     await state.set_state(FilmStates.all()[1])
     keyboard = ReplyKeyboardMarkup(resize_keyboard=True,  one_time_keyboard=True)
-    keyboard.add(*buttons[:len(films)], button_no)
+    num_of_films = sum([len(movies) for movies in films.values()])
+    keyboard.add(*buttons[:num_of_films], button_no)
     await message.reply(msg, reply_markup=keyboard)
 
 
