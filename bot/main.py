@@ -2,6 +2,7 @@ from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
 from mail.query import find_top_five_by_name, list_of_films
+from mail.film_page import set_film_info
 
 from aiogram.utils.helper import Helper, HelperMode, ListItem
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
@@ -49,16 +50,16 @@ async def choose_film(message: types.Message):
                                "качественного поиска.")
     else:
         film = LAST_SEARCH_FOR_USER[message.from_user.id][int(message.text) - 1]
-        # film = set_film_info(film)
-        # film.print()
-        # if film.image:
-        #     caption = ''
-        #     if film.description:
-        #         caption = film.description
-        #     await bot.send_photo(message.from_user.id, film.image,
-        #                          caption=caption)
-        # else:
-        await bot.send_message(message.from_user.id, film.url)
+        set_film_info(film)
+        film.print()
+        if film.image:
+            caption = ''
+            if film.description:
+                caption = film.description
+            await bot.send_photo(message.from_user.id, film.image,
+                                 caption=caption)
+        else:
+            await bot.send_message(message.from_user.id, film.url)
         # print(film.image)
         # print(film.description)
     state = dp.current_state(user=message.from_user.id)
