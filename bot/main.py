@@ -14,16 +14,16 @@ bot = Bot(token='663290175:AAGT2h1895I-xZ_7Ma2VsqcyrQDa2ecV7p8')
 dp = Dispatcher(bot, storage=MemoryStorage())
 
 
-CHOICES = {1: '1', 2: '2', 3: '3', 4: '4', 5: '5', 6: 'Ничего не подходит'}
+CHOICES = {1: '1', 2: '2', 3: '3', 4: '4', 5: '5', 6: '6', 7: 'Ничего не подходит'}
 
 
-buttons = [KeyboardButton('1'),
-           KeyboardButton('2'),
-           KeyboardButton('3'),
-           KeyboardButton('4'),
-           KeyboardButton('5'),
-           KeyboardButton('6')]
-button_no = KeyboardButton('Ничего не подходит')
+buttons = [KeyboardButton(CHOICES[1]),
+           KeyboardButton(CHOICES[2]),
+           KeyboardButton(CHOICES[3]),
+           KeyboardButton(CHOICES[4]),
+           KeyboardButton(CHOICES[5]),
+           KeyboardButton(CHOICES[6])]
+button_no = KeyboardButton(CHOICES[7])
 
 
 class FilmStates(Helper):
@@ -47,7 +47,7 @@ async def choose_film(message: types.Message):
     if message.text not in CHOICES.values():
         await bot.send_message(message.from_user.id,
                                "Поищем другой фильм? Пиши название!")
-    elif message.text == CHOICES[6]:
+    elif message.text == CHOICES[7]:
         await bot.send_message(message.from_user.id,
                                "Попробуй уточнить название для более "
                                "качественного поиска.")
