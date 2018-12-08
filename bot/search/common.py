@@ -6,3 +6,8 @@ HEADERS = {
 film_types = ['Фильмы', 'Сериалы']
 
 mail_url = 'https://kino.mail.ru'
+
+rambler_url = ('https://nova.rambler.ru/search?&utm_source=r0'
+               '&utm_campaign=self_promo&utm_medium=form&utm_content=search&query=')
+
+watch_online = ' смотреть онлайн'

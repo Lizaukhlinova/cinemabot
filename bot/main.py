@@ -1,9 +1,10 @@
 from aiogram import Bot, types, utils
 from aiogram.dispatcher import Dispatcher
-from aiogram.utils import executor
-from mail.query import find_top_five_by_name, list_of_films
-from mail.film_page import set_film_info
-from mail import common
+from aiogram.utils import executor, markdown
+from search.query import find_top_five_by_name, list_of_films
+from search.film_page import set_film_info
+from search import common
+from search.search_in_rambler import list_of_links
 import requests
 
 from aiogram.utils.helper import Helper, HelperMode, ListItem
@@ -73,8 +74,7 @@ async def choose_film(message: types.Message):
                                  caption=caption)
         except (requests.exceptions.ConnectionError, utils.exceptions.WrongFileIdentifier):
             await bot.send_message(message.from_user.id, film.url)
-        # print(film.image)
-        # print(film.description)
+        await bot.send_message(message.from_user.id, list_of_links(film))
     state = dp.current_state(user=message.from_user.id)
     await state.set_state(FilmStates.FILM_STATE_0)
 
