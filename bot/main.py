@@ -77,7 +77,7 @@ async def choose_film(message: types.Message):
             await bot.send_photo(message.from_user.id, film.image,
                                  caption=caption)
             if extra_msg:
-                bot.send_message(message.from_user.id, extra_msg)
+                await bot.send_message(message.from_user.id, extra_msg)
         except (requests.exceptions.ConnectionError, utils.exceptions.WrongFileIdentifier):
             await bot.send_message(message.from_user.id, film.url)
         await bot.send_message(message.from_user.id, list_of_links(film), parse_mode='HTML')
