@@ -14,11 +14,16 @@ HEADERS = {
                   'rv:45.0) Gecko/20100101 Firefox/45.0'
 }
 
-film_types = ['Фильмы', 'Сериалы']
+FILM_TYPES = ['Фильмы', 'Сериалы']
 
-mail_url = 'https://kino.mail.ru'
+TOP_SIZE_BY_TYPE = {
+    'Фильмы': 5,
+    'Сериалы': 3,
+}
 
-yahoo_url = ('https://ru.search.yahoo.com/search;_ylt=AwrJQ56mLQ1cPxsAzw3Kxgt.;'
+MAIL_URL = 'https://kino.mail.ru'
+
+YAHOO_URL = ('https://ru.search.yahoo.com/search;_ylt=AwrJQ56mLQ1cPxsAzw3Kxgt.;'
              '_ylc=X1MDMjExNDcwMTAwMgRfcgMyBGZyAwRncHJpZANnTzlkb3NEWVNqdWREVHNOd'
              'Upjd1BBBG5fcnNsdAMwBG5fc3VnZwM2BG9yaWdpbgNydS5zZWFyY2gueWFob28uY29t'
              'BHBvcwMwBHBxc3RyAwRwcXN0cmwDBHFzdHJsAzE5OARxdWVyeQMlRDAlQkMlRDAlQjA'
@@ -30,7 +35,7 @@ yahoo_url = ('https://ru.search.yahoo.com/search;_ylt=AwrJQ56mLQ1cPxsAzw3Kxgt.;'
 
 CAPTION_SIZE = 1024
 
-watch_online = ' смотреть онлайн'
+WATCH_ONLINE = ' смотреть онлайн'
 
 NO_POSTER = 'https://kino.mail.ru/img/v2/nopicture/'
 

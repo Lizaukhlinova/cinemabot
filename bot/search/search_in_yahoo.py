@@ -8,9 +8,9 @@ from . import utils
 
 
 def _find_top_five_links(film):
-    query = film.name + ' ' + film.year + utils.watch_online
+    query = film.name + ' ' + film.year + utils.WATCH_ONLINE
     query = urllib.parse.quote(query)
-    search_response = requests.get(utils.yahoo_url + query)
+    search_response = requests.get(utils.YAHOO_URL + query)
     soup = BeautifulSoup(search_response.content, features='lxml')
     serp_items = soup.findAll('div',
                               {'class': 'compTitle options-toggle'})[:5]

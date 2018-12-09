@@ -11,7 +11,7 @@ class Film:
 
     def set_image(self, image):
         if image.startswith('/'):
-            image = utils.mail_url + image
+            image = utils.MAIL_URL + image
         self.image = image
 
     def set_description(self, description):

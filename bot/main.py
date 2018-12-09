@@ -53,14 +53,14 @@ async def choose_film(message: types.Message):
     else:
         button = int(message.text)
         films = utils.LAST_SEARCH_FOR_USER[message.from_user.id]
-        if utils.film_types[0] in films:
-            if button > len(films[utils.film_types[0]]):
-                button -= len(films[utils.film_types[0]])
-                films = films[utils.film_types[1]]
+        if utils.FILM_TYPES[0] in films:
+            if button > len(films[utils.FILM_TYPES[0]]):
+                button -= len(films[utils.FILM_TYPES[0]])
+                films = films[utils.FILM_TYPES[1]]
             else:
-                films = films[utils.film_types[0]]
+                films = films[utils.FILM_TYPES[0]]
         else:
-            films = films[utils.film_types[1]]
+            films = films[utils.FILM_TYPES[1]]
         film = films[button - 1]
         try:
             try:
@@ -70,8 +70,6 @@ async def choose_film(message: types.Message):
                     caption_index = film.description[:utils.CAPTION_SIZE]
                     caption_index = caption_index.rfind('.') + 1
                     caption = film.description[:caption_index]
-                print(message.from_user.id, film.name,
-                      film.image, film.description)
                 logger.info(str(message.from_user.id) + ' ' + film.name +
                             ' ' + film.image + ' ' + str(film.description))
                 if film.description:
@@ -106,7 +104,6 @@ async def choose_film(message: types.Message):
 
 @dp.message_handler(state='*')
 async def search_film(message: types.Message):
-    print(message.from_user.id, message.text)
     logger.info(str(message.from_user.id) + ' ' + message.text)
     state = dp.current_state(user=message.from_user.id)
     film_name = message.text

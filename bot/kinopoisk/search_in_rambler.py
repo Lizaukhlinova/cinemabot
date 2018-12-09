@@ -8,7 +8,7 @@ from . import common
 
 
 def find_top_five_links(film):
-    query = film.name + ' ' + film.year + common.watch_online
+    query = film.name + ' ' + film.year + common.WATCH_ONLINE
     query = urllib.parse.quote(query)
     search_response = requests.get(common.rambler_url + query)
     soup = BeautifulSoup(search_response.content, features='lxml')
