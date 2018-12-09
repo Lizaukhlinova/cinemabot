@@ -78,7 +78,7 @@ async def choose_film(message: types.Message):
                 caption_index = film.description[:common.caption_max_size].rfind('.') + 1
                 caption = film.description[:caption_index]
             print(message.from_user.id, film.name, film.image, film.description)
-            logger.info(str(message.from_user.id) + film.name + ' ' + film.image + ' ' + film.description)
+            logger.info(str(message.from_user.id) + film.name + ' ' + film.image + ' ' + str(film.description))
             if not film.image.startswith(common.no_poster) and film.description:
                 await bot.send_photo(message.from_user.id, film.image,
                                      caption=caption)
