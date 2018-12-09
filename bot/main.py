@@ -4,7 +4,8 @@ from aiogram.utils import executor, markdown
 from search.query import find_top_five_by_name, list_of_films
 from search.film_page import set_film_info
 from search import common
-from search.search_in_rambler import list_of_links
+# from search.search_in_rambler import list_of_links
+from search.search_in_yahoo import list_of_links
 import requests
 
 from aiogram.utils.helper import Helper, HelperMode, ListItem
