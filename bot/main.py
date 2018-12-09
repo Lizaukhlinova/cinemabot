@@ -5,7 +5,9 @@ import os
 import requests
 
 import aiogram
+from aiogram import types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
+from aiogram.utils import executor, exceptions
 from aiogram.utils.helper import Helper, HelperMode, ListItem
 
 from search.parse_film_page import set_film_info
@@ -34,14 +36,14 @@ class FilmStates(Helper):
 
 
 @dp.message_handler(state='*', commands=['start', 'help'])
-async def send_welcome(message: aiogram.types.Message):
+async def send_welcome(message: types.Message):
     state = dp.current_state(user=message.from_user.id)
     await message.reply(utils.MESSAGES['start'])
     await state.set_state(FilmStates.FILM_STATE_0)
 
 
 @dp.message_handler(state=FilmStates.FILM_STATE_1)
-async def choose_film(message: aiogram.types.Message):
+async def choose_film(message: types.Message):
     if message.text not in utils.CHOICES.values():
         await bot.send_message(message.from_user.id,
                                utils.MESSAGES['another_film'])
@@ -82,7 +84,7 @@ async def choose_film(message: aiogram.types.Message):
                 else:
                     raise utils.NoPhotoAndDescription
             except (requests.exceptions.ConnectionError,
-                    aiogram.utils.exceptions.WrongFileIdentifier,
+                    exceptions.WrongFileIdentifier,
                     utils.NoPhotoAndDescription) as exc:
                 logger.exception(exc)
                 await bot.send_message(message.from_user.id, film.url)
@@ -103,7 +105,7 @@ async def choose_film(message: aiogram.types.Message):
 
 
 @dp.message_handler(state='*')
-async def search_film(message: aiogram.types.Message):
+async def search_film(message: types.Message):
     print(message.from_user.id, message.text)
     logger.info(str(message.from_user.id) + ' ' + message.text)
     state = dp.current_state(user=message.from_user.id)
@@ -129,4 +131,4 @@ async def search_film(message: aiogram.types.Message):
 
 
 if __name__ == '__main__':
-    aiogram.utils.executor.start_polling(dp)
+    executor.start_polling(dp)
