@@ -47,7 +47,7 @@ async def choose_film(message: types.Message):
     if message.text not in utils.CHOICES.values():
         await bot.send_message(message.from_user.id,
                                utils.MESSAGES['another_film'])
-    elif message.text == utils.CHOICES[7]:
+    elif message.text == utils.CHOICES[9]:
         await bot.send_message(message.from_user.id,
                                utils.MESSAGES['nothing_matches'])
     else:

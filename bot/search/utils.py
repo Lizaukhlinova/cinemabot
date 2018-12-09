@@ -46,15 +46,19 @@ CHOICES = {
     4: '4',
     5: '5',
     6: '6',
-    7: 'Ничего не подходит'}
+    7: '7',
+    8: '8',
+    9: 'Ничего не подходит'}
 
 BUTTONS = [KeyboardButton(CHOICES[1]),
            KeyboardButton(CHOICES[2]),
            KeyboardButton(CHOICES[3]),
            KeyboardButton(CHOICES[4]),
            KeyboardButton(CHOICES[5]),
-           KeyboardButton(CHOICES[6])]
-BUTTON_NO = KeyboardButton(CHOICES[7])
+           KeyboardButton(CHOICES[6]),
+           KeyboardButton(CHOICES[7]),
+           KeyboardButton(CHOICES[8])]
+BUTTON_NO = KeyboardButton(CHOICES[9])
 
 
 MESSAGES = {
