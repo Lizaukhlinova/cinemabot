@@ -1,10 +1,10 @@
 from aiogram import Bot, types, utils
 from aiogram.dispatcher import Dispatcher
-from aiogram.utils import executor, markdown
+from aiogram.utils import executor
 from search.query import find_top_five_by_name, list_of_films
 from search.film_page import set_film_info
 from search import common
-# from search.search_in_rambler import list_of_links
+
 from search.search_in_yahoo import list_of_links
 import requests
 import datetime as dt
@@ -12,6 +12,19 @@ from aiogram.utils.helper import Helper, HelperMode, ListItem
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.types import ReplyKeyboardMarkup
 import os
+
+import logging
+from logging.handlers import RotatingFileHandler
+
+logger = logging.getLogger()
+handler = RotatingFileHandler('log.txt', maxBytes=5*1024*1024,
+                              backupCount=2)
+
+formatter = logging.Formatter('[%(asctime)s] - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+
+logger.addHandler(handler)
+logger.setLevel(logging.INFO)
 
 bot = Bot(token=os.environ['BOT_TOKEN'])
 dp = Dispatcher(bot, storage=MemoryStorage())
@@ -33,7 +46,7 @@ class NoPhotoAndDescription(Exception):
 @dp.message_handler(commands=['start', 'help'])
 async def send_welcome(message: types.Message):
     state = dp.current_state(user=message.from_user.id)
-    await message.reply("Ура, я супер!")
+    await message.reply(common.MESSAGES['start'])
     await state.set_state(FilmStates.FILM_STATE_0)
 
 
@@ -65,6 +78,7 @@ async def choose_film(message: types.Message):
                 caption_index = film.description[:common.caption_max_size].rfind('.') + 1
                 caption = film.description[:caption_index]
             film.print()
+            logger.info(film.name + ' ' + film.image + ' ' + film.description)
             if not film.image.startswith(common.no_poster) and film.description:
                 await bot.send_photo(message.from_user.id, film.image,
                                      caption=caption)
@@ -72,7 +86,8 @@ async def choose_film(message: types.Message):
                 raise NoPhotoAndDescription
         except (requests.exceptions.ConnectionError,
                 utils.exceptions.WrongFileIdentifier,
-                NoPhotoAndDescription):
+                NoPhotoAndDescription) as exc:
+            logger.exception(exc)
             await bot.send_message(message.from_user.id, film.url)
         if dt.datetime.utcnow().year < dt.datetime.strptime(film.year[2:6], '%Y').year:
             await bot.send_message(message.from_user.id, "Фильм еще не вышел в прокат, скорее всего, "
@@ -86,6 +101,7 @@ async def choose_film(message: types.Message):
 @dp.message_handler(state='*')
 async def search_film(message: types.Message):
     print(message.text)
+    logger.info(message.from_user.id + ' ' + message.text)
     state = dp.current_state(user=message.from_user.id)
     film_name = message.text
     films = find_top_five_by_name(film_name)

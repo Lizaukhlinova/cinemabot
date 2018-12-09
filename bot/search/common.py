@@ -39,3 +39,10 @@ buttons = [KeyboardButton(CHOICES[1]),
            KeyboardButton(CHOICES[5]),
            KeyboardButton(CHOICES[6])]
 button_no = KeyboardButton(CHOICES[7])
+
+
+MESSAGES = {
+    'start': 'Привет! Я помогу тебе искать сайты для просмотра фильмов онлайн :) '
+             'Просто набери название фильма, который ты хочешь посмотреть, и я '
+             'подскажу, где его можно посмотреть.'
+}
