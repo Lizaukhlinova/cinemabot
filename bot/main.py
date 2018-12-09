@@ -35,10 +35,17 @@ class FilmStates(Helper):
     FILM_STATE_1 = ListItem()
 
 
-@dp.message_handler(state='*', commands=['start', 'help'])
+@dp.message_handler(state='*', commands=['start'])
 async def send_welcome(message: types.Message):
     state = dp.current_state(user=message.from_user.id)
     await message.reply(utils.MESSAGES['start'])
+    await state.set_state(FilmStates.FILM_STATE_0)
+
+
+@dp.message_handler(state='*', commands=['help'])
+async def send_help(message: types.Message):
+    state = dp.current_state(user=message.from_user.id)
+    await message.reply(utils.MESSAGES['help'])
     await state.set_state(FilmStates.FILM_STATE_0)
 
 
