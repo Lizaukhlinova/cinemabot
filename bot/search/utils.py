@@ -18,11 +18,6 @@ film_types = ['Фильмы', 'Сериалы']
 
 mail_url = 'https://kino.mail.ru'
 
-rambler_url = ('https://nova.rambler.ru/search?&utm_source=r0'
-               '&utm_campaign=self_promo&utm_medium=form&utm_content=search&query=')
-
-watch_online = ' смотреть онлайн'
-
 yahoo_url = ('https://ru.search.yahoo.com/search;_ylt=AwrJQ56mLQ1cPxsAzw3Kxgt.;'
              '_ylc=X1MDMjExNDcwMTAwMgRfcgMyBGZyAwRncHJpZANnTzlkb3NEWVNqdWREVHNOd'
              'Upjd1BBBG5fcnNsdAMwBG5fc3VnZwM2BG9yaWdpbgNydS5zZWFyY2gueWFob28uY29t'
@@ -33,20 +28,21 @@ yahoo_url = ('https://ru.search.yahoo.com/search;_ylt=AwrJQ56mLQ1cPxsAzw3Kxgt.;'
              'RDAlQkUlRDAlQkQlRDAlQkIlRDAlQjAlRDAlQjklRDAlQkQEdF9zdG1wAzE1NDQzNjc'
              '1MzQ-?fr2=sb-top-ru.search&fr=sfp&iscqry=&p=')
 
-caption_max_size = 1024
+CAPTION_SIZE = 1024
 
-no_poster = 'https://kino.mail.ru/img/v2/nopicture/'
+watch_online = ' смотреть онлайн'
+
+NO_POSTER = 'https://kino.mail.ru/img/v2/nopicture/'
 
 CHOICES = {1: '1', 2: '2', 3: '3', 4: '4', 5: '5', 6: '6', 7: 'Ничего не подходит'}
 
-
-buttons = [KeyboardButton(CHOICES[1]),
+BUTTONS = [KeyboardButton(CHOICES[1]),
            KeyboardButton(CHOICES[2]),
            KeyboardButton(CHOICES[3]),
            KeyboardButton(CHOICES[4]),
            KeyboardButton(CHOICES[5]),
            KeyboardButton(CHOICES[6])]
-button_no = KeyboardButton(CHOICES[7])
+BUTTON_NO = KeyboardButton(CHOICES[7])
 
 
 MESSAGES = {
@@ -60,7 +56,7 @@ MESSAGES = {
                        'качественного поиска.',
     'exception': 'Извини, что-то пошло не так. :(',
     'not_found': 'К сожалению, по твоему запросу ничего не найдено :(',
-
+    'smth_went_wrong': 'Извини, что-то пошло не так :('
 }
 
 LAST_SEARCH_FOR_USER = {}

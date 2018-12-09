@@ -4,11 +4,8 @@ from logging.handlers import RotatingFileHandler
 import os
 import requests
 
-from aiogram import Bot, types, utils
+import aiogram
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
-from aiogram.dispatcher import Dispatcher
-from aiogram.types import ReplyKeyboardMarkup
-from aiogram.utils import executor
 from aiogram.utils.helper import Helper, HelperMode, ListItem
 
 from search.parse_film_page import set_film_info
@@ -26,8 +23,8 @@ handler.setFormatter(formatter)
 logger.addHandler(handler)
 logger.setLevel(logging.INFO)
 
-bot = Bot(token=os.environ['BOT_TOKEN'])
-dp = Dispatcher(bot, storage=MemoryStorage())
+bot = aiogram.Bot(token=os.environ['BOT_TOKEN'])
+dp = aiogram.dispatcher.Dispatcher(bot, storage=MemoryStorage())
 
 
 class FilmStates(Helper):
@@ -37,14 +34,14 @@ class FilmStates(Helper):
 
 
 @dp.message_handler(state='*', commands=['start', 'help'])
-async def send_welcome(message: types.Message):
+async def send_welcome(message: aiogram.types.Message):
     state = dp.current_state(user=message.from_user.id)
     await message.reply(utils.MESSAGES['start'])
     await state.set_state(FilmStates.FILM_STATE_0)
 
 
 @dp.message_handler(state=FilmStates.FILM_STATE_1)
-async def choose_film(message: types.Message):
+async def choose_film(message: aiogram.types.Message):
     if message.text not in utils.CHOICES.values():
         await bot.send_message(message.from_user.id,
                                utils.MESSAGES['another_film'])
@@ -64,46 +61,49 @@ async def choose_film(message: types.Message):
             films = films[utils.film_types[1]]
         film = films[button - 1]
         try:
-            set_film_info(film)
-            caption = ''
-            if film.description:
-                caption_index = film.description[:utils.caption_max_size]
-                caption_index = caption_index.rfind('.') + 1
-                caption = film.description[:caption_index]
-            print(message.from_user.id, film.name,
-                  film.image, film.description)
-            logger.info(str(message.from_user.id) + film.name + ' ' +
-                        film.image + ' ' + str(film.description))
-            if film.description:
-                if film.image.startswith(utils.no_poster):
-                    await bot.send_message(message.from_user.id,
-                                           film.description)
+            try:
+                set_film_info(film)
+                caption = ''
+                if film.description:
+                    caption_index = film.description[:utils.CAPTION_SIZE]
+                    caption_index = caption_index.rfind('.') + 1
+                    caption = film.description[:caption_index]
+                print(message.from_user.id, film.name,
+                      film.image, film.description)
+                logger.info(str(message.from_user.id) + ' ' + film.name +
+                            ' ' + film.image + ' ' + str(film.description))
+                if film.description:
+                    if film.image.startswith(utils.NO_POSTER):
+                        await bot.send_message(message.from_user.id,
+                                               film.description)
+                    else:
+                        await bot.send_photo(message.from_user.id, film.image,
+                                             caption=caption)
                 else:
-                    await bot.send_photo(message.from_user.id, film.image,
-                                         caption=caption)
+                    raise utils.NoPhotoAndDescription
+            except (requests.exceptions.ConnectionError,
+                    aiogram.utils.exceptions.WrongFileIdentifier,
+                    utils.NoPhotoAndDescription) as exc:
+                logger.exception(exc)
+                await bot.send_message(message.from_user.id, film.url)
+            if (dt.datetime.utcnow().year <
+                    dt.datetime.strptime(film.year[2:6], '%Y').year):
+                await bot.send_message(message.from_user.id,
+                                       utils.MESSAGES['not_released'])
             else:
-                raise utils.NoPhotoAndDescription
-        except (requests.exceptions.ConnectionError,
-                utils.exceptions.WrongFileIdentifier,
-                utils.NoPhotoAndDescription) as exc:
+                await bot.send_message(message.from_user.id,
+                                       utils.MESSAGES['list_of_links'] +
+                                       list_of_links(film), parse_mode='HTML')
+        except Exception as exc:
             logger.exception(exc)
-            await bot.send_message(message.from_user.id, film.url)
-        except utils.BadStatusCode as exc:
-            logger.exception(exc)
-        if (dt.datetime.utcnow().year <
-                dt.datetime.strptime(film.year[2:6], '%Y').year):
             await bot.send_message(message.from_user.id,
-                                   utils.MESSAGES['not_released'])
-        else:
-            await bot.send_message(message.from_user.id,
-                                   utils.MESSAGES['list_of_links'] +
-                                   list_of_links(film), parse_mode='HTML')
+                                   utils.MESSAGES['smth_went_wrong'])
     state = dp.current_state(user=message.from_user.id)
     await state.set_state(FilmStates.FILM_STATE_0)
 
 
 @dp.message_handler(state='*')
-async def search_film(message: types.Message):
+async def search_film(message: aiogram.types.Message):
     print(message.from_user.id, message.text)
     logger.info(str(message.from_user.id) + ' ' + message.text)
     state = dp.current_state(user=message.from_user.id)
@@ -121,12 +121,12 @@ async def search_film(message: types.Message):
     utils.LAST_SEARCH_FOR_USER[message.from_user.id] = films
     msg = list_of_films(films)
     await state.set_state(FilmStates.all()[1])
-    keyboard = ReplyKeyboardMarkup(resize_keyboard=True,
-                                   one_time_keyboard=True)
+    keyboard = aiogram.types.ReplyKeyboardMarkup(resize_keyboard=True,
+                                                 one_time_keyboard=True)
     num_of_films = sum([len(movies) for movies in films.values()])
-    keyboard.add(*utils.buttons[:num_of_films], utils.button_no)
+    keyboard.add(*utils.BUTTONS[:num_of_films], utils.BUTTON_NO)
     await message.reply(msg, reply_markup=keyboard)
 
 
 if __name__ == '__main__':
-    executor.start_polling(dp)
+    aiogram.utils.executor.start_polling(dp)
