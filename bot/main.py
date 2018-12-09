@@ -68,11 +68,16 @@ async def choose_film(message: types.Message):
         try:
             set_film_info(film)
             caption = ''
+            extra_msg = ''
             if film.description:
-                caption = film.description
+                caption_index = film.description[:common.caption_max_size].rfind('.') + 1
+                caption = film.description[:caption_index]
+                extra_msg = film.description[caption_index:]
             film.print()
             await bot.send_photo(message.from_user.id, film.image,
                                  caption=caption)
+            if extra_msg:
+                bot.send_message(message.from_user.id, extra_msg)
         except (requests.exceptions.ConnectionError, utils.exceptions.WrongFileIdentifier):
             await bot.send_message(message.from_user.id, film.url)
         await bot.send_message(message.from_user.id, list_of_links(film), parse_mode='HTML')

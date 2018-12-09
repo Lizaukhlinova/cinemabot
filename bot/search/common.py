@@ -21,3 +21,5 @@ yahoo_url = ('https://ru.search.yahoo.com/search;_ylt=AwrJQ56mLQ1cPxsAzw3Kxgt.;'
              'DElODElRDAlQkMlRDAlQkUlRDElODIlRDElODAlRDAlQjUlRDElODIlRDElOEMlMjAl'
              'RDAlQkUlRDAlQkQlRDAlQkIlRDAlQjAlRDAlQjklRDAlQkQEdF9zdG1wAzE1NDQzNjc'
              '1MzQ-?fr2=sb-top-ru.search&fr=sfp&iscqry=&p=')
+
+caption_max_size = 900
