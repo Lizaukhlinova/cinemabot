@@ -34,7 +34,14 @@ watch_online = ' смотреть онлайн'
 
 NO_POSTER = 'https://kino.mail.ru/img/v2/nopicture/'
 
-CHOICES = {1: '1', 2: '2', 3: '3', 4: '4', 5: '5', 6: '6', 7: 'Ничего не подходит'}
+CHOICES = {
+    1: '1',
+    2: '2',
+    3: '3',
+    4: '4',
+    5: '5',
+    6: '6',
+    7: 'Ничего не подходит'}
 
 BUTTONS = [KeyboardButton(CHOICES[1]),
            KeyboardButton(CHOICES[2]),

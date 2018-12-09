@@ -17,7 +17,7 @@ from search import utils
 
 
 logger = logging.getLogger()
-handler = RotatingFileHandler('log.txt', maxBytes=5*1024*1024,
+handler = RotatingFileHandler('log.txt', maxBytes=5 * 1024 * 1024,
                               backupCount=2)
 
 formatter = logging.Formatter('[%(asctime)s] - %(levelname)s - %(message)s')
