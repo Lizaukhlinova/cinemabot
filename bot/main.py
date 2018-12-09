@@ -90,10 +90,10 @@ async def choose_film(message: types.Message):
             logger.exception(exc)
             await bot.send_message(message.from_user.id, film.url)
         if dt.datetime.utcnow().year < dt.datetime.strptime(film.year[2:6], '%Y').year:
-            await bot.send_message(message.from_user.id, "Фильм еще не вышел в прокат, скорее всего, "
-                                                         "его еще нельзя посмотреть онлайн.")
+            await bot.send_message(message.from_user.id, common.MESSAGES['not_released'])
         else:
-            await bot.send_message(message.from_user.id, list_of_links(film), parse_mode='HTML')
+            await bot.send_message(message.from_user.id, common.MESSAGES['list_of_links'] +
+                                   list_of_links(film), parse_mode='HTML')
     state = dp.current_state(user=message.from_user.id)
     await state.set_state(FilmStates.FILM_STATE_0)
 
