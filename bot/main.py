@@ -10,22 +10,11 @@ import requests
 import datetime as dt
 from aiogram.utils.helper import Helper, HelperMode, ListItem
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
-from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
+from aiogram.types import ReplyKeyboardMarkup
+import os
 
-bot = Bot(token='663290175:AAGT2h1895I-xZ_7Ma2VsqcyrQDa2ecV7p8')
+bot = Bot(token=os.environ['BOT_TOKEN'])
 dp = Dispatcher(bot, storage=MemoryStorage())
-
-
-CHOICES = {1: '1', 2: '2', 3: '3', 4: '4', 5: '5', 6: '6', 7: 'Ничего не подходит'}
-
-
-buttons = [KeyboardButton(CHOICES[1]),
-           KeyboardButton(CHOICES[2]),
-           KeyboardButton(CHOICES[3]),
-           KeyboardButton(CHOICES[4]),
-           KeyboardButton(CHOICES[5]),
-           KeyboardButton(CHOICES[6])]
-button_no = KeyboardButton(CHOICES[7])
 
 
 class FilmStates(Helper):
@@ -50,10 +39,10 @@ async def send_welcome(message: types.Message):
 
 @dp.message_handler(state=FilmStates.FILM_STATE_1)
 async def choose_film(message: types.Message):
-    if message.text not in CHOICES.values():
+    if message.text not in common.CHOICES.values():
         await bot.send_message(message.from_user.id,
                                "Поищем другой фильм? Пиши название!")
-    elif message.text == CHOICES[7]:
+    elif message.text == common.CHOICES[7]:
         await bot.send_message(message.from_user.id,
                                "Попробуй уточнить название для более "
                                "качественного поиска.")
@@ -108,7 +97,7 @@ async def search_film(message: types.Message):
     await state.set_state(FilmStates.all()[1])
     keyboard = ReplyKeyboardMarkup(resize_keyboard=True,  one_time_keyboard=True)
     num_of_films = sum([len(movies) for movies in films.values()])
-    keyboard.add(*buttons[:num_of_films], button_no)
+    keyboard.add(*common.buttons[:num_of_films], common.button_no)
     await message.reply(msg, reply_markup=keyboard)
 
 

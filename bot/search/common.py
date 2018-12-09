@@ -1,3 +1,6 @@
+from aiogram.types import KeyboardButton
+
+
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; '
                   'rv:45.0) Gecko/20100101 Firefox/45.0'
@@ -25,3 +28,14 @@ yahoo_url = ('https://ru.search.yahoo.com/search;_ylt=AwrJQ56mLQ1cPxsAzw3Kxgt.;'
 caption_max_size = 900
 
 no_poster = 'https://kino.mail.ru/img/v2/nopicture/'
+
+CHOICES = {1: '1', 2: '2', 3: '3', 4: '4', 5: '5', 6: '6', 7: 'Ничего не подходит'}
+
+
+buttons = [KeyboardButton(CHOICES[1]),
+           KeyboardButton(CHOICES[2]),
+           KeyboardButton(CHOICES[3]),
+           KeyboardButton(CHOICES[4]),
+           KeyboardButton(CHOICES[5]),
+           KeyboardButton(CHOICES[6])]
+button_no = KeyboardButton(CHOICES[7])
