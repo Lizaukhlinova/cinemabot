@@ -1,4 +1,4 @@
-from . import common
+from . import utils
 
 
 class Film:
@@ -11,11 +11,8 @@ class Film:
 
     def set_image(self, image):
         if image.startswith('/'):
-            image = common.mail_url + image
+            image = utils.mail_url + image
         self.image = image
 
     def set_description(self, description):
         self.description = description
-
-    def print(self):
-        print(self.name, self.year, self.image, self.description)

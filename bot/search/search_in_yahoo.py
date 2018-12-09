@@ -4,21 +4,22 @@ import urllib
 import requests
 from bs4 import BeautifulSoup
 
-from . import common
+from . import utils
 
 
-def find_top_five_links(film):
-    query = film.name + ' ' + film.year + common.watch_online
+def _find_top_five_links(film):
+    query = film.name + ' ' + film.year + utils.watch_online
     query = urllib.parse.quote(query)
-    search_response = requests.get(common.yahoo_url + query)
+    search_response = requests.get(utils.yahoo_url + query)
     soup = BeautifulSoup(search_response.content, features='lxml')
-    serp_items = soup.findAll('div', {'class': 'compTitle options-toggle'})[:5]
+    serp_items = soup.findAll('div',
+                              {'class': 'compTitle options-toggle'})[:5]
     links = [tag.find('a')['href'] for tag in serp_items]
     return links
 
 
 def list_of_links(film):
-    links = find_top_five_links(film)
+    links = _find_top_five_links(film)
     res = ''
     for i in range(len(links)):
         title = urllib.parse.urlparse(links[i]).netloc
