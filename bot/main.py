@@ -79,9 +79,12 @@ async def choose_film(message: types.Message):
                 caption = film.description[:caption_index]
             print(message.from_user.id, film.name, film.image, film.description)
             logger.info(str(message.from_user.id) + film.name + ' ' + film.image + ' ' + str(film.description))
-            if not film.image.startswith(common.no_poster) and film.description:
-                await bot.send_photo(message.from_user.id, film.image,
-                                     caption=caption)
+            if film.description:
+                if film.image.startswith(common.no_poster):
+                    await bot.send_message(message.from_user.id, film.description)
+                else:
+                    await bot.send_photo(message.from_user.id, film.image,
+                                         caption=caption)
             else:
                 raise NoPhotoAndDescription
         except (requests.exceptions.ConnectionError,
