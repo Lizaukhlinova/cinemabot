@@ -7,7 +7,7 @@ from search import common
 # from search.search_in_rambler import list_of_links
 from search.search_in_yahoo import list_of_links
 import requests
-
+import datetime as dt
 from aiogram.utils.helper import Helper, HelperMode, ListItem
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
@@ -35,6 +35,10 @@ class FilmStates(Helper):
 
 
 LAST_SEARCH_FOR_USER = {}
+
+
+class NoPhotoAndDescription(Exception):
+    pass
 
 
 @dp.message_handler(commands=['start', 'help'])
@@ -72,11 +76,20 @@ async def choose_film(message: types.Message):
                 caption_index = film.description[:common.caption_max_size].rfind('.') + 1
                 caption = film.description[:caption_index]
             film.print()
-            await bot.send_photo(message.from_user.id, film.image,
-                                 caption=caption)
-        except (requests.exceptions.ConnectionError, utils.exceptions.WrongFileIdentifier):
+            if not film.image.startswith(common.no_poster) and film.description:
+                await bot.send_photo(message.from_user.id, film.image,
+                                     caption=caption)
+            else:
+                raise NoPhotoAndDescription
+        except (requests.exceptions.ConnectionError,
+                utils.exceptions.WrongFileIdentifier,
+                NoPhotoAndDescription):
             await bot.send_message(message.from_user.id, film.url)
-        await bot.send_message(message.from_user.id, list_of_links(film), parse_mode='HTML')
+        if dt.datetime.utcnow().year < dt.datetime.strptime(film.year[:4], '%Y').year:
+            await bot.send_message(message.from_user.id, "Фильм еще не вышел в прокат, скорее всего, "
+                                                         "его еще нельзя посмотреть онлайн.")
+        else:
+            await bot.send_message(message.from_user.id, list_of_links(film), parse_mode='HTML')
     state = dp.current_state(user=message.from_user.id)
     await state.set_state(FilmStates.FILM_STATE_0)
 

@@ -23,3 +23,5 @@ yahoo_url = ('https://ru.search.yahoo.com/search;_ylt=AwrJQ56mLQ1cPxsAzw3Kxgt.;'
              '1MzQ-?fr2=sb-top-ru.search&fr=sfp&iscqry=&p=')
 
 caption_max_size = 900
+
+no_poster = 'https://kino.mail.ru/img/v2/nopicture/'
