@@ -14,5 +14,7 @@ def set_film_info(film):
     div_tag = soup.find('div', {'class': 'block block_bg_gray padding_vertical_30 js-module'})
     photo = div_tag.find('span', {'class': 'photo__pic'})
     film.set_image(photo['style'][21:-1])
-    description = div_tag.find('span', {'itemprop': 'description'}).text
+    description = div_tag.find('span', {'itemprop': 'description'})
+    if description:
+        description = description.text
     film.set_description(description)
