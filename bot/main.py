@@ -85,7 +85,7 @@ async def choose_film(message: types.Message):
                 utils.exceptions.WrongFileIdentifier,
                 NoPhotoAndDescription):
             await bot.send_message(message.from_user.id, film.url)
-        if dt.datetime.utcnow().year < dt.datetime.strptime(film.year[:4], '%Y').year:
+        if dt.datetime.utcnow().year < dt.datetime.strptime(film.year[2:6], '%Y').year:
             await bot.send_message(message.from_user.id, "Фильм еще не вышел в прокат, скорее всего, "
                                                          "его еще нельзя посмотреть онлайн.")
         else:
