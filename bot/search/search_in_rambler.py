@@ -23,5 +23,5 @@ def list_of_links(film):
     res = ''
     for i in range(len(links)):
         title = urllib.parse.urlparse(links[i]).netloc
-        res += '{}. {}<br>'.format(i + 1, markdown.hlink(title, links[i]))
+        res += '{}. {}\n'.format(i + 1, markdown.hlink(title, links[i]))
     return res
